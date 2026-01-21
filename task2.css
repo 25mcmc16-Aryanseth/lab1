@@ -1,0 +1,50 @@
+body{
+    padding: 0;
+    margin: 0;
+    background-color: rgb(153, 153, 150);
+    color: black;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+header{
+    text-align: center;
+    font-weight: bold;
+    
+}
+header h2{
+    font-weight: normal;
+    font-size: 16px;
+    color: rgb(113, 135, 146);
+}
+nav{
+    text-align: center;
+    padding: 5px;
+}
+nav a{
+    text-decoration: none;
+    margin: 0 10px;
+    
+}
+nav a:hover{
+    text-decoration: underline;
+}
+main{
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 30px;
+    
+}
+article{
+    padding: 10px;
+}
+article div{
+    margin-bottom: 20px;
+}
+article img{
+    max-width: 100%;
+    display: block;
+    margin: 20px auto;
+}
+footer{
+    text-align: center;
+}
+
