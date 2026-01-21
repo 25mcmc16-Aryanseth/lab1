@@ -1,0 +1,101 @@
+
+     /* ---------- BASIC RESET ---------- */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* ---------- FIXED HEADER ---------- */
+        header {
+            position: fixed;              /* fixed positioning */
+            top: 0;
+            width: 100%;
+            background-color: #333;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        /* ---------- FIXED FOOTER ---------- */
+        footer {
+            position: fixed;              /* fixed positioning */
+            bottom: 0;
+            width: 100%;
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        /* ---------- MAIN CONTENT ---------- */
+        .container {
+            margin-top: 80px;              /* space for header */
+            margin-bottom: 60px;           /* space for footer */
+            padding: 20px;
+        }
+
+        /* ---------- GALLERY ---------- */
+        .gallery {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* ---------- PRODUCT CARD ---------- */
+        .card {
+            width: 250px;
+            border: 2px solid #ccc;       /* border (Box Model) */
+            padding: 10px;                /* padding (Box Model) */
+            margin: 10px;                 /* margin (Box Model) */
+            position: relative;           /* relative positioning */
+        }
+
+        /* ---------- IMAGE CONTAINER ---------- */
+        .image-box {
+            position: relative;           /* parent for absolute overlay */
+        }
+
+        .image-box img {
+            width: 100%;
+            height: auto;
+        }
+
+        /* ---------- IMAGE OVERLAY ---------- */
+        .overlay {
+            position: absolute;           /* absolute positioning */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+        }
+
+        .image-box:hover .overlay {
+            opacity: 1;
+        }
+
+        /* ---------- TITLE ---------- */
+        .title {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        /* ---------- DESCRIPTION ---------- */
+        .description span {
+            color: #555;
+        }
+
+        /* ---------- STICKY TEXT ---------- */
+        .sticky-note {
+            position: sticky;             /* sticky positioning */
+            top: 80px;
+            background: #ffeb3b;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+  
