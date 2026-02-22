@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Catalog</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        .filters {
+            margin-bottom: 20px;
+        }
+
+        select, input {
+            padding: 6px;
+            margin-right: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>Book Catalog</h2>
+
+<div class="filters">
+    Genre:
+    <select id="genreFilter">
+        <option value="">All</option>
+    </select>
+
+    Author:
+    <select id="authorFilter">
+        <option value="">All</option>
+    </select>
+
+    Min Price:
+    <input type="number" id="minPrice" placeholder="0">
+
+    Max Price:
+    <input type="number" id="maxPrice" placeholder="100">
+
+    <button id="applyFilter">Apply Filter</button>
+</div>
+
+<table id="bookTable">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Genre</th>
+            <th>Price ($)</th>
+            <th>Publication Date</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script>
+$(document).ready(function () {
+
+    let booksJSON = [];
+
+    // Load XML using AJAX
+    $.ajax({
+        type: "GET",
+        url: "books.xml",
+        dataType: "xml",
+        success: function (xml) {
+
+            $(xml).find("book").each(function () {
+
+                let book = {
+                    title: $(this).find("title").text(),
+                    author: $(this).find("author").text(),
+                    genre: $(this).find("genre").text(),
+                    price: parseFloat($(this).find("price").text()),
+                    publication_date: $(this).find("publication_date").text()
+                };
+
+                booksJSON.push(book);
+            });
+
+            populateFilters();
+            displayBooks(booksJSON);
+        }
+    });
+
+    function populateFilters() {
+        let genres = new Set();
+        let authors = new Set();
+
+        booksJSON.forEach(book => {
+            genres.add(book.genre);
+            authors.add(book.author);
+        });
+
+        genres.forEach(g => {
+            $("#genreFilter").append(`<option value="${g}">${g}</option>`);
+        });
+
+        authors.forEach(a => {
+            $("#authorFilter").append(`<option value="${a}">${a}</option>`);
+        });
+    }
+
+    function displayBooks(data) {
+        $("#bookTable tbody").empty();
+
+        data.forEach(book => {
+            let row = `
+                <tr>
+                    <td>${book.title}</td>
+                    <td>${book.author}</td>
+                    <td>${book.genre}</td>
+                    <td>${book.price}</td>
+                    <td>${book.publication_date}</td>
+                </tr>
+            `;
+            $("#bookTable tbody").append(row);
+        });
+    }
+
+    $("#applyFilter").click(function () {
+
+        let selectedGenre = $("#genreFilter").val();
+        let selectedAuthor = $("#authorFilter").val();
+        let minPrice = parseFloat($("#minPrice").val()) || 0;
+        let maxPrice = parseFloat($("#maxPrice").val()) || Infinity;
+
+        let filtered = booksJSON.filter(book => {
+
+            return (selectedGenre === "" || book.genre === selectedGenre) &&
+                   (selectedAuthor === "" || book.author === selectedAuthor) &&
+                   (book.price >= minPrice && book.price <= maxPrice);
+        });
+
+        displayBooks(filtered);
+    });
+
+});
+</script>
+
+</body>
+</html>

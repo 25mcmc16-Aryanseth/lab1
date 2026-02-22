@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog>
+    <book>
+        <title>The Great Gatsby</title>
+        <author>F. Scott Fitzgerald</author>
+        <genre>Fiction</genre>
+        <price>10.99</price>
+        <publication_date>1925-04-10</publication_date>
+    </book>
+
+    <book>
+        <title>Clean Code</title>
+        <author>Robert C. Martin</author>
+        <genre>Programming</genre>
+        <price>35.50</price>
+        <publication_date>2008-08-01</publication_date>
+    </book>
+
+    <book>
+        <title>The Hobbit</title>
+        <author>J.R.R. Tolkien</author>
+        <genre>Fantasy</genre>
+        <price>15.20</price>
+        <publication_date>1937-09-21</publication_date>
+    </book>
+
+    <book>
+        <title>Atomic Habits</title>
+        <author>James Clear</author>
+        <genre>Self-Help</genre>
+        <price>20.00</price>
+        <publication_date>2018-10-16</publication_date>
+    </book>
+
+    <book>
+        <title>You Don’t Know JS</title>
+        <author>Kyle Simpson</author>
+        <genre>Programming</genre>
+        <price>28.99</price>
+        <publication_date>2015-12-27</publication_date>
+    </book>
+</catalog>
