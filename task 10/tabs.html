@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Custom jQuery Tabs Plugin</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        body { font-family: Arial; }
+
+        .tabs {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            cursor: pointer;
+        }
+
+        .tabs li {
+            padding: 10px 20px;
+            background: #ddd;
+            margin-right: 5px;
+        }
+
+        .active-tab {
+            background: #007bff;
+            color: white;
+        }
+
+        .tab-content {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Tabbed Navigation Example</h2>
+
+<ul class="tabs">
+    <li data-tab="home">Home</li>
+    <li data-tab="about">About</li>
+    <li data-tab="contact">Contact</li>
+</ul>
+
+<div id="home" class="tab-content">
+    <h3>Home Section</h3>
+    <p>Welcome to the homepage.</p>
+</div>
+
+<div id="about" class="tab-content">
+    <h3>About Section</h3>
+    <p>This is the about page content.</p>
+</div>
+
+<div id="contact" class="tab-content">
+    <h3>Contact Section</h3>
+    <p>Email: aryan@email.com</p>
+</div>
+
+<script>
+
+(function($){
+
+    $.fn.simpleTabs = function(options){
+
+        var settings = $.extend({
+            activeClass: "active-tab",
+            animationSpeed: 400,
+            defaultTab: 0
+        }, options);
+
+        var tabs = this;
+        var contents = $(".tab-content");
+
+        function activateTab(index){
+            tabs.removeClass(settings.activeClass);
+            tabs.eq(index).addClass(settings.activeClass);
+
+            contents.stop(true,true).fadeOut(settings.animationSpeed);
+            $("#" + tabs.eq(index).data("tab"))
+                .fadeIn(settings.animationSpeed);
+
+            // Update URL hash
+            window.location.hash = tabs.eq(index).data("tab");
+        }
+
+        // Click event
+        tabs.click(function(){
+            activateTab($(this).index());
+        });
+
+        // Keyboard navigation
+        tabs.keydown(function(e){
+            var index = $(this).index();
+
+            if(e.key === "ArrowRight"){
+                index = (index + 1) % tabs.length;
+                tabs.eq(index).focus().click();
+            }
+
+            if(e.key === "ArrowLeft"){
+                index = (index - 1 + tabs.length) % tabs.length;
+                tabs.eq(index).focus().click();
+            }
+        });
+
+        // Make tabs focusable
+        tabs.attr("tabindex", "0");
+
+        // Load from URL hash if exists
+        if(window.location.hash){
+            var hash = window.location.hash.substring(1);
+            var hashIndex = tabs.index($("[data-tab='"+hash+"']"));
+            if(hashIndex !== -1){
+                activateTab(hashIndex);
+                return this;
+            }
+        }
+
+        // Default tab
+        activateTab(settings.defaultTab);
+
+        return this;
+    };
+
+}(jQuery));
+
+
+$(document).ready(function(){
+
+    $(".tabs li").simpleTabs({
+        activeClass: "active-tab",
+        animationSpeed: 500,
+        defaultTab: 0
+    });
+
+});
+
+</script>
+
+</body>
+</html>
