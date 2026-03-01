@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dynamic Registration Form</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        body { font-family: Arial; }
+        .form-group { margin-bottom: 15px; }
+        .error { color: red; font-size: 13px; }
+    </style>
+</head>
+<body>
+
+<h2>Registration Form</h2>
+<div id="formContainer"></div>
+
+<script>
+
+// JSON OBJECT
+var formJSON = {
+    fields: [
+        { type: "text", label: "Full Name", id: "name", required: true },
+        { type: "email", label: "Email", id: "email", required: true },
+        { type: "password", label: "Password", id: "password", required: true },
+        { 
+            type: "select", 
+            label: "Country", 
+            id: "country",
+            options: ["Select", "India", "USA", "Canada"]
+        },
+        {
+            type: "select",
+            label: "State",
+            id: "state",
+            options: ["Select", "California", "Texas", "New York"],
+            dependsOn: "USA"
+        },
+        {
+            type: "radio",
+            label: "Are you a Student?",
+            id: "student",
+            options: ["Yes", "No"]
+        },
+        {
+            type: "text",
+            label: "College Name",
+            id: "college",
+            dependsOnRadio: "Yes"
+        }
+    ]
+};
+
+$(document).ready(function(){
+
+    var form = $("<form></form>");
+
+    $.each(formJSON.fields, function(index, field){
+
+        var group = $("<div class='form-group'></div>");
+        group.append("<label>"+field.label+"</label><br>");
+
+        if(field.type === "text" || field.type === "email" || field.type === "password"){
+            group.append("<input type='"+field.type+"' id='"+field.id+"'>");
+        }
+
+        if(field.type === "select"){
+            var select = $("<select id='"+field.id+"'></select>");
+            $.each(field.options, function(i, option){
+                select.append("<option value='"+option+"'>"+option+"</option>");
+            });
+            group.append(select);
+
+            if(field.dependsOn){
+                group.hide();
+                group.attr("data-country", field.dependsOn);
+            }
+        }
+
+        if(field.type === "radio"){
+            $.each(field.options, function(i, option){
+                group.append("<input type='radio' name='"+field.id+"' value='"+option+"'> "+option+" ");
+            });
+        }
+
+        if(field.dependsOnRadio){
+            group.hide();
+            group.attr("data-radio", field.dependsOnRadio);
+        }
+
+        group.append("<div class='error' id='"+field.id+"Error'></div>");
+        form.append(group);
+    });
+
+    form.append("<button type='submit'>Submit</button>");
+    $("#formContainer").append(form);
+
+
+    // Country change
+    $(document).on("change", "#country", function(){
+        if($(this).val() === "USA"){
+            $("[data-country='USA']").show();
+        } else {
+            $("[data-country='USA']").hide();
+        }
+    });
+
+    // Radio change
+    $(document).on("change", "input[name='student']", function(){
+        if($(this).val() === "Yes"){
+            $("[data-radio='Yes']").show();
+        } else {
+            $("[data-radio='Yes']").hide();
+        }
+    });
+
+    // Validation
+    form.submit(function(e){
+        e.preventDefault();
+        $(".error").text("");
+        var valid = true;
+
+        if($("#name").val().trim() === ""){
+            $("#nameError").text("Name required");
+            valid = false;
+        }
+
+        var emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+        if(!emailPattern.test($("#email").val())){
+            $("#emailError").text("Invalid email");
+            valid = false;
+        }
+
+        if($("#password").val().length < 6){
+            $("#passwordError").text("Password must be 6+ characters");
+            valid = false;
+        }
+
+        if($("#country").val() === "Select"){
+            $("#countryError").text("Select country");
+            valid = false;
+        }
+
+        if($("#country").val() === "USA" && $("#state").val() === "Select"){
+            $("#stateError").text("Select state");
+            valid = false;
+        }
+
+        if($("input[name='student']:checked").val() === "Yes" &&
+           $("#college").val().trim() === ""){
+            $("#collegeError").text("Enter college name");
+            valid = false;
+        }
+
+        if(valid){
+            alert("Form Submitted Successfully!");
+        }
+    });
+
+});
+</script>
+
+</body>
+</html>
